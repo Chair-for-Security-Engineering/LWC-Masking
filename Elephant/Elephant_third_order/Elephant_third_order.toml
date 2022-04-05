@@ -1,0 +1,68 @@
+name = "Elephant_third_order"
+description = "Elephant with 3rd order masking"
+author = ["Nicolai Mueller", "Amir Moradi"]
+url = "https://github.com/GMUCERG/Elephant/tree/master/src_rtl/v1" # Reference design which we protect
+license = "GPL-3.0"
+version = "0.1.0"
+[rtl]
+sources = [
+	"src_rtl/CryptoCore_SCA.vhd",
+	"src_rtl/design_pkg.vhd",
+	"src_rtl/elephant_constants.vhd",
+	"src_rtl/elephant_datapath.vhd",
+	"src_rtl/elephant_datapath_lfsr.vhd",
+	"src_rtl/elephant_perm_HPC2_ClockGating_d3.v",
+	"src_rtl/elephant_perm_lfsr.vhd",
+	"src_rtl/LWC_config.vhd",
+	"LWC/data_piso.vhd",
+	"LWC/data_sipo.vhd",
+	"LWC/FIFO.vhd",
+	"LWC/key_piso.vhd",
+	"LWC/LWC_SCA.vhd",
+	"LWC/NIST_LWAPI.vhd",
+	"LWC/PostProcessor.vhd",
+	"LWC/PreProcessor.vhd",
+	"HPC2/and_HPC2.vhd",
+	"HPC2/xnor_HPC2.vhd",
+	"HPC2/xor_HPC2.vhd",
+	"General/not_masked.v",
+	"General/reg.vhd",
+	"General/xnor_2.vhd",
+	"General/xor_2.vhd",
+]
+
+# includes = []
+top = "LWC_SCA"
+# clock.port = "clk"
+# reset.port = "rst"
+# reset.active_high = true
+# reset.asynchronous = false
+# parameters = { G_DO_FIFO_DEPTH = 1 }
+[language]
+vhdl.version = "2008"
+# vhdl.synopsys = false
+verilog.version = "2001"
+# systemverilog.version = "2009"
+# [tb]
+# sources = ["LWC_SCA_TB.vhd"]
+# includes = []
+# top = "LWC_SCA_TB"
+[lwc.aead]
+algorithm = "Elephant160v1"
+# key_bits = 128
+# npub_bits = 96
+# tag_bits = 64
+# input_sequence.encrypt = ["npub", "ad", "data"]
+# input_sequence.decrypt = ["npub", "ad", "data", "tag"]
+# [lwc.hash]
+# algorithm = "" ###### (hashing is not supported)
+# digest_bits = 128
+[lwc.ports]
+# pdi.bit_width = 32
+pdi.num_shares = 4
+rdi.bit_width = 1680
+# sdi.bit_width = 32
+sdi.num_shares = 4
+[lwc.sca_protection]
+target = ["spa", "dpa", "cpa", "timing"]
+order = 3

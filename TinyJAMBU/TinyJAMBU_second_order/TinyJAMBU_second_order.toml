@@ -1,0 +1,62 @@
+name = "GIFT-COFB_second_order"
+description = "GIFT-COFB with 2nd order masking"
+author = ["Nicolai Mueller", "Amir Moradi"]
+url = "https://github.com/GMUCERG/TinyJAMBU" # Reference design which we protect
+license = "GPL-3.0"
+version = "0.1.0"
+[rtl]
+sources = [
+	"src_rtl/CryptoCore_SCA.vhd",
+	"src_rtl/design_pkg.vhd",
+	"src_rtl/LWC_config.vhd",
+	"src_rtl/nlfsr.vhd",
+	"src_rtl/nlfsr_core_HPC2_ClockGating_d2.v",
+	"src_rtl/tinyjambu_control.vhd",
+	"src_rtl/tinyjambu_datapath.vhd",
+	"LWC/data_piso.vhd",
+	"LWC/data_sipo.vhd",
+	"LWC/FIFO.vhd",
+	"LWC/key_piso.vhd",
+	"LWC/LWC_SCA.vhd",
+	"LWC/NIST_LWAPI.vhd",
+	"LWC/PostProcessor.vhd",
+	"LWC/PreProcessor.vhd",
+	"HPC2/nand_HPC2.vhd",
+	"General/reg.vhd",
+]
+
+# includes = []
+top = "LWC_SCA"
+# clock.port = "clk"
+# reset.port = "rst"
+# reset.active_high = true
+# reset.asynchronous = false
+# parameters = { G_DO_FIFO_DEPTH = 1 }
+[language]
+vhdl.version = "2008"
+# vhdl.synopsys = false
+verilog.version = "2001"
+# systemverilog.version = "2009"
+# [tb]
+# sources = ["LWC_SCA_TB.vhd"]
+# includes = []
+# top = "LWC_SCA_TB"
+[lwc.aead]
+algorithm = "tinyjambu128"
+# key_bits = 128
+# npub_bits = 96
+# tag_bits = 64
+# input_sequence.encrypt = ["npub", "ad", "data"]
+# input_sequence.decrypt = [ "npub", "ad", "data", "tag"]
+# [lwc.hash]
+# algorithm = "" ###### (hashing is not supported)
+# digest_bits = 256
+[lwc.ports]
+# pdi.bit_width = 32
+pdi.num_shares = 3
+rdi.bit_width = 96
+# sdi.bit_width = 32
+sdi.num_shares = 3
+[lwc.sca_protection]
+target = ["spa", "dpa", "cpa", "timing"]
+order = 2

@@ -1,0 +1,65 @@
+name = "SPARKLE_third_order"
+description = "SPARKLE with 3rd order masking"
+author = ["Nicolai Mueller", "Amir Moradi"]
+url = "https://github.com/vtsal/schwaemm_esch_lwc_aead_hash" # Reference design which we protect
+license = "GPL-3.0"
+version = "0.1.0"
+[rtl]
+sources = [
+	"src_rtl/arx_round_HPC2_ClockGating_d1.v",
+	"src_rtl/CryptoCore_SCA.vhd",
+	"src_rtl/design_pkg.vhd",
+	"src_rtl/LWC_config.vhd",
+	"src_rtl/SchwaemmEsch.vhd",
+	"src_rtl/SchwaemmEschController.vhd",
+	"LWC/data_piso.vhd",
+	"LWC/data_sipo.vhd",
+	"LWC/FIFO.vhd",
+	"LWC/key_piso.vhd",
+	"LWC/LWC_SCA.vhd",
+	"LWC/NIST_LWAPI.vhd",
+	"LWC/PostProcessor.vhd",
+	"LWC/PreProcessor.vhd",
+	"HPC2/and_HPC2.vhd",
+	"HPC2/xor_HPC2.vhd",
+	"General/Mux2.vhd",
+	"General/mux2_masked.vhd",
+	"General/reg.vhd",
+	"General/xor_2.vhd",
+]
+
+# includes = []
+top = "LWC_SCA"
+# clock.port = "clk"
+# reset.port = "rst"
+# reset.active_high = true
+# reset.asynchronous = false
+# parameters = { G_DO_FIFO_DEPTH = 1 }
+[language]
+vhdl.version = "2008"
+# vhdl.synopsys = false
+verilog.version = "2001"
+# systemverilog.version = "2009"
+# [tb]
+# sources = ["LWC_SCA_TB.vhd"]
+# includes = []
+# top = "LWC_SCA_TB"
+[lwc.aead]
+algorithm = "Schwaemm256128"
+# key_bits = 128
+# npub_bits = 256
+# tag_bits = 128
+# input_sequence.encrypt = ["nsec", "npub", "ad", "data"]
+# input_sequence.decrypt = ["ensec", "npub", "ad", "data", "tag"]
+# [lwc.hash]
+# algorithm = "Esch256"
+# digest_bits = 256
+[lwc.ports]
+# pdi.bit_width = 32
+pdi.num_shares = 4
+rdi.bit_width = 9216
+# sdi.bit_width = 32
+sdi.num_shares = 4
+[lwc.sca_protection]
+target = ["spa", "dpa", "cpa", "timing"]
+order = 3

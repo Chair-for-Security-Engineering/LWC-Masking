@@ -1,0 +1,74 @@
+name = "Romulusn_third_order"
+description = "Romulus N with 3rd order masking"
+author = ["Nicolai Mueller", "Amir Moradi"]
+url = "https://github.com/romulusae/romulus-hardware/tree/309c3861c04d1b91d3a946fee370945440d22196/romulusn/src_rtl/v1_1r_serld" # Reference design which we protect
+license = "GPL-3.0"
+version = "0.1.0"
+[rtl]
+sources = [
+	"src_rtl/api.v",
+	"src_rtl/HPermutation.vhd",
+	"src_rtl/key_reg.v",
+	"src_rtl/key_reg_cg.v",
+	"src_rtl/KeyExpansionNoReg.vhd",
+	"src_rtl/lfsr_gf56.v",
+	"src_rtl/lfsr2_20.v",
+	"src_rtl/lfsr3_20.v",
+	"src_rtl/LWC_config.vhd",
+	"src_rtl/LWC_config2.v",
+	"src_rtl/LWC_SCA.v",
+	"src_rtl/mode_top.v",
+	"src_rtl/NIST_LWAPI_pkg.vhd",
+	"src_rtl/Permutation.vhd",
+	"src_rtl/pt4.v",
+	"src_rtl/pt8.v",
+	"src_rtl/RoundFunction_HPC2_ClockGating_d3.v",
+	"src_rtl/SkinnyPKG.vhd",
+	"src_rtl/state_reg.v",
+	"src_rtl/state_reg_cg.v",
+	"src_rtl/state_update_32b.v",
+	"src_rtl/tkx_update_32b.v",
+	"src_rtl/tky_update_32b.v",
+	"src_rtl/tkz_update_32b.v",
+	"src_rtl/tkz_update_32b_2.v",
+	"HPC2/nor_HPC2.vhd",
+	"HPC2/xnor_HPC2.vhd",
+	"HPC2/xor_HPC2.vhd",
+	"General/not_masked.vhd"
+	"General/reg.vhd",
+	"General/xnor_2.vhd",
+	"General/xor_2.vhd",
+]
+
+top = "LWC_SCA"
+clock.port = "clk"
+reset.port = "rst"
+reset.active_high = true
+reset.asynchronous = false
+
+[language]
+vhdl.version = "2008"
+verilog.version = "2001"
+
+[tb]
+sources = ["LWC_SCA_TB.vhd"]
+top = "LWC_SCA_TB"
+
+[lwc.aead]
+algorithm = "romulusn1v12"
+key_bits = 128
+npub_bits = 128
+tag_bits = 128
+input_sequence.encrypt = ["ad", "npub", "data"]
+input_sequence.decrypt = ["ad", "npub", "data", "tag"]
+
+[lwc.ports]
+pdi.bit_width = 32
+pdi.num_shares = 4
+rdi.bit_width = 768
+sdi.bit_width = 32
+sdi.num_shares = 4
+
+[lwc.sca_protection]
+target = ["spa", "dpa", "cpa", "timing"]
+order = 3
