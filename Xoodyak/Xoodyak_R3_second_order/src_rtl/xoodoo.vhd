@@ -90,7 +90,7 @@ architecture rtl of xoodoo is
     signal round_in, round_out : std_logic_vector(PDI_SHARES*384-1 downto 0);
       
     signal rc_state_in, rc_state_out : std_logic_vector(5 downto 0);
-    signal done,running : std_logic;
+    signal done, done_short, running, clk_round : std_logic;
     signal word_in_s : std_logic_vector(PDI_SHARES*32-1 downto 0);
     signal word_index_in_s : integer range 0 to 11;
     signal word_enable_in_s : std_logic;
@@ -101,9 +101,10 @@ architecture rtl of xoodoo is
     
     signal counter : integer range 0 to 8;
     signal counter_reset, counter_enable, register_enable, rc_reset, rc_enable, final_s0, final_s1, final_s2 : std_logic;
-    signal latency : unsigned(3 downto 0) := b"1100";
+    signal latency : unsigned(3 downto 0) := b"0011";
     
 begin  -- rtl
+    clk_round <= clk_i and (not done);
 
     rg00_map : xoodoo_register
         port map(
@@ -165,7 +166,7 @@ begin  -- rtl
     rd00_map : xoodoo_n_rounds
         generic map (roundPerCycle => roundPerCycle)
         port map(
-            clk          => clk_i,
+            clk          => clk_round,
             state_in     => round_in,
             state_out    => round_out,
             rnd          => rdi,
@@ -202,7 +203,9 @@ begin  -- rtl
     main: process(clk_i)
     begin 
         if rising_edge(clk_i) then
-            if (rst_i = active_rst) then
+            done_short <= '0';
+
+			if (rst_i = active_rst) then
                 done <= '0';
                 running <= '0';
                 counter_enable <= '0';
@@ -244,6 +247,7 @@ begin  -- rtl
 
                 if rc_state_out = "010011" and counter = latency then
                     done <= '1';
+					done_short <= '1';
                     running <= '0';
                     counter_enable <= '0';
                     counter_reset <= '0';
@@ -254,7 +258,7 @@ begin  -- rtl
         end if;
     end process;
 
-    rdi_ready <= counter_enable;
+    rdi_ready <= counter_enable or start_i or word_enable_in_s or done_short;
     reg_out_s0_vec <= xstate_to_stdlogicvector(reg_out_s0);
     reg_out_s1_vec <= xstate_to_stdlogicvector(reg_out_s1);
     reg_out_s2_vec <= xstate_to_stdlogicvector(reg_out_s2);
