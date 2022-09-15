@@ -116,8 +116,8 @@ signal latency : unsigned(10 downto 0) := b"00000000010";
 
 begin
 
-bdi_reg_unshared <= (others => '0'); --bdi_reg(1*CCW-1 downto 0*CCW) xor bdi_reg(2*CCW-1 downto 1*CCW);
-bdo_reg_unshared <= (others => '0'); --bdo_reg(1*CCW-1 downto 0*CCW) xor bdo_reg(2*CCW-1 downto 1*CCW);
+bdi_reg_unshared <= bdi_reg(1*CCW-1 downto 0*CCW) xor bdi_reg(2*CCW-1 downto 1*CCW);
+bdo_reg_unshared <= bdo_reg(1*CCW-1 downto 0*CCW) xor bdo_reg(2*CCW-1 downto 1*CCW);
 key_index               <= std_logic_vector (key_count(1 downto 0));
 
     process(clk)
@@ -157,7 +157,7 @@ key_index               <= std_logic_vector (key_count(1 downto 0));
         key_load            <= '0';
         key_ready           <= '0';
         bdi_ready           <= '0';
-        rdi_ready           <= '0';
+        rdi_ready           <= '1';
         bdo_valid           <= '0';
         end_of_block        <= '0';
         d_load              <= '0';
@@ -200,7 +200,7 @@ key_index               <= std_logic_vector (key_count(1 downto 0));
                 end if;
             end if;
         when KEY_INIT =>    
-            rdi_ready <= '1';
+            --rdi_ready <= '1';
             
             if(rdi_valid = '1') then
                 if (counter = latency) then
@@ -222,13 +222,15 @@ key_index               <= std_logic_vector (key_count(1 downto 0));
                 end if;
             end if;
         when NPUB_INIT_A =>
+            --rdi_ready <= '1';
+            
             fbits_sel       <= b"00";
             s_sel           <= b"00";
             nlfsr_load      <= '1';
             next_state      <= NPUB_INIT_B;
             next_npub       <= npub;
         when NPUB_INIT_B =>
-            rdi_ready <= '1';
+            --rdi_ready <= '1';
 
             if(rdi_valid = '1') then            
                 next_npub    <= npub;            
@@ -275,7 +277,7 @@ key_index               <= std_logic_vector (key_count(1 downto 0));
             nlfsr_load      <= '1'; 
             next_state      <= AD_B;
         when AD_B => 
-            rdi_ready <= '1';
+            --rdi_ready <= '1';
             
             if(rdi_valid = '1') then
                 if (counter = latency) then
@@ -318,7 +320,7 @@ key_index               <= std_logic_vector (key_count(1 downto 0));
             nlfsr_load      <= '1'; 
             next_state      <= ENCRYPT_B;
         when ENCRYPT_B =>          
-            rdi_ready <= '1';
+            --rdi_ready <= '1';
 
             if(rdi_valid = '1') then
                 if (counter = latency) then
@@ -366,7 +368,7 @@ key_index               <= std_logic_vector (key_count(1 downto 0));
             nlfsr_load      <= '1'; 
             next_state      <= TAG_B;
         when TAG_B =>
-            rdi_ready <= '1';
+            --rdi_ready <= '1';
             
             if(rdi_valid = '1') then
                 if (counter = latency) then
@@ -409,7 +411,7 @@ key_index               <= std_logic_vector (key_count(1 downto 0));
             nlfsr_load      <= '1'; 
             next_state      <= TAG_E;
         when TAG_E =>         
-            rdi_ready <= '1';
+            --rdi_ready <= '1';
             
             if(rdi_valid = '1') then
                 if(counter = latency) then
