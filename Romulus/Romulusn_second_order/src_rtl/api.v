@@ -165,7 +165,7 @@ module api (/*AUTOARG*/
       decrypt <= 0;      
       sdi_ready <= 0;
       pdi_ready <= 0;
-      rdi_ready <= 0;
+      rdi_ready <= 1;
       pdo_valid <= 0;
       pdo_reg <= 0;
       tk1sn <= tk1s;      
@@ -855,7 +855,6 @@ module api (/*AUTOARG*/
         end // case: storemp
         
         encryptad: begin   
-            rdi_ready <= 1;
             if (rdi_valid == 1) begin    
                 if (cnt2 == `LATENCY) begin
                     cntn2 <= 5'b00001;
@@ -902,7 +901,6 @@ module api (/*AUTOARG*/
         end // case: encryptad
         
         encryptn: begin
-            rdi_ready <= 1;
             if (rdi_valid == 1) begin   
                 if (cnt2 == `LATENCY) begin
                     cntn2 <= 5'b00001;        
@@ -929,7 +927,6 @@ module api (/*AUTOARG*/
         end // case: encryptn
         
         encryptm: begin
-           rdi_ready <= 1;
            if (rdi_valid == 1) begin   
                if (cnt2 == `LATENCY) begin
                    cntn2 <= 5'b00001;    

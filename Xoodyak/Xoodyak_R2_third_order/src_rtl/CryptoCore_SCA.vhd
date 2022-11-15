@@ -623,7 +623,7 @@ begin
         -- Default values preventing latches
         key_ready_s            <= '0';
         bdi_ready_s            <= '0';
-        rdi_ready_s            <= '0';
+        rdi_ready_s            <= '1';
         msg_auth_valid_s       <= '0';
         n_msg_auth_s           <= msg_auth_s;
         n_eoi_s                <= eoi_s;
@@ -667,7 +667,6 @@ begin
                 end if;
 
             when STORE_RND =>
-                rdi_ready_s <= '1';
                 init_reg_s <= '1';
 
             -- If key must be updated, assert key_ready.

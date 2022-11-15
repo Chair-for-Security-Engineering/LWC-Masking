@@ -572,7 +572,7 @@ public_process: process(latency, rdi_valid, current_state, perm_start, round_cou
 begin
  
 -- Defaults
-rdi_ready <= '0';
+rdi_ready <= '1';
 arx_cntr_init <= '0';
 arx_cntr_en <= '0';
 perm_cntr_init <= '0';
@@ -586,7 +586,6 @@ case current_state is
         next_state <= IDLE; 
 		if (perm_start = '1') then		  
             -- Start counters and reset to 0
-            rdi_ready <= '1';
             arx_cntr_en <= '1';
             arx_cntr_init <= '1';
             perm_cntr_init <= '1';
@@ -602,7 +601,6 @@ case current_state is
     when RUN => 
         
         next_state <= RUN;
-        rdi_ready <= '1';
         
         if (rdi_valid = '1') then          
             delay_cntr_en <= '1';

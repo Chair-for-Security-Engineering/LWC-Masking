@@ -251,7 +251,7 @@ begin
     begin
         key_ready <= '0';
         bdi_ready <= '0';
-        rdi_ready <= '0';			
+        rdi_ready <= '1';			
         bdo_valid <= '0';
         
         iv_we <= '0';
@@ -377,8 +377,6 @@ begin
                 next_state <= s_store_r;
             
             when s_store_r =>   
-                rdi_ready <= '1';
-        
                 if(rdi_valid = '1') then                         
                     if hash_in = '1' then
                         -- Starts by initializing state as all zeroes
@@ -454,8 +452,6 @@ begin
                 end if;
             
            when s_p256_1 =>
-               rdi_ready <= '1';
-        
                if(rdi_valid = '1') then          
                    counter_enable <= '1';
                    iv_sel <= "00"; -- for p256
@@ -470,8 +466,6 @@ begin
                    end if;       
                end if;
            when s_p256_2 =>
-               rdi_ready <= '1';
-        
                if(rdi_valid = '1') then  
                    counter_enable <= '1';
                    p256_sel <= '1';

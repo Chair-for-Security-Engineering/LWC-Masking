@@ -157,7 +157,7 @@ key_index               <= std_logic_vector (key_count(1 downto 0));
         key_load            <= '0';
         key_ready           <= '0';
         bdi_ready           <= '0';
-        rdi_ready           <= '0';
+        rdi_ready           <= '1';
         bdo_valid           <= '0';
         end_of_block        <= '0';
         d_load              <= '0';
@@ -200,8 +200,6 @@ key_index               <= std_logic_vector (key_count(1 downto 0));
                 end if;
             end if;
         when KEY_INIT =>    
-            rdi_ready <= '1';
-            
             if(rdi_valid = '1') then
                 if (counter = latency) then
                     nlfsr_en        <= '1';
@@ -228,8 +226,6 @@ key_index               <= std_logic_vector (key_count(1 downto 0));
             next_state      <= NPUB_INIT_B;
             next_npub       <= npub;
         when NPUB_INIT_B =>
-            rdi_ready <= '1';
-
             if(rdi_valid = '1') then            
                 next_npub    <= npub;            
                 if (counter = latency) then
@@ -275,8 +271,6 @@ key_index               <= std_logic_vector (key_count(1 downto 0));
             nlfsr_load      <= '1'; 
             next_state      <= AD_B;
         when AD_B => 
-            rdi_ready <= '1';
-            
             if(rdi_valid = '1') then
                 if (counter = latency) then
                     nlfsr_en     <= '1';
@@ -318,8 +312,6 @@ key_index               <= std_logic_vector (key_count(1 downto 0));
             nlfsr_load      <= '1'; 
             next_state      <= ENCRYPT_B;
         when ENCRYPT_B =>          
-            rdi_ready <= '1';
-
             if(rdi_valid = '1') then
                 if (counter = latency) then
                     nlfsr_en     <= '1';
@@ -366,8 +358,6 @@ key_index               <= std_logic_vector (key_count(1 downto 0));
             nlfsr_load      <= '1'; 
             next_state      <= TAG_B;
         when TAG_B =>
-            rdi_ready <= '1';
-            
             if(rdi_valid = '1') then
                 if (counter = latency) then
                     nlfsr_en     <= '1';
@@ -409,8 +399,6 @@ key_index               <= std_logic_vector (key_count(1 downto 0));
             nlfsr_load      <= '1'; 
             next_state      <= TAG_E;
         when TAG_E =>         
-            rdi_ready <= '1';
-            
             if(rdi_valid = '1') then
                 if(counter = latency) then
                     nlfsr_en     <= '1';

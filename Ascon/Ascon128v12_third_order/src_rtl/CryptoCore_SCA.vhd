@@ -624,7 +624,7 @@ BEGIN
     BEGIN
 
         -- Default values preventing latches
-        rdi_ready_s <= '0';
+        rdi_ready_s <= '1';
         key_ready_s <= '0';
         bdi_ready_s <= '0';
         msg_auth_valid_s <= '0';
@@ -660,24 +660,6 @@ BEGIN
                         n_eot_s <= '1';
                     END IF;
                 END IF;
-
-            WHEN STORE_RND =>
-                rdi_ready_s <= '1';
-
-            WHEN INIT_PROCESS =>
-                rdi_ready_s <= '1';
-
-            WHEN PROCESS_AD =>
-                rdi_ready_s <= '1';
-
-            WHEN PROCESS_MSG =>
-                rdi_ready_s <= '1';
-
-            WHEN FINAL_PROCESS =>
-                rdi_ready_s <= '1';
-
-            WHEN PROCESS_HASH =>
-                rdi_ready_s <= '1';
 
             WHEN STORE_KEY =>
                 -- If key must be updated, assert key_ready.

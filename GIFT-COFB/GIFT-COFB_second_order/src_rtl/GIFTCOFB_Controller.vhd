@@ -240,7 +240,7 @@ begin
         next_state          <= idle;
         key_ready           <= '0';
         bdi_ready           <= '0';
-        rdi_ready           <= '0';
+        rdi_ready           <= '1';
         bdo_valid           <= '0';
         msg_auth_valid      <= '0';  
         GIFT_start          <= '0';    
@@ -297,8 +297,6 @@ begin
                 next_state          <= load_rnd;
            
             when load_rnd =>   
-                rdi_ready <= '1';        
-                
                 if(rdi_valid = '1') then
                     if (key_valid = '1' and key_update = '1') then -- Get a new key
                         KeyReg128_rst   <= '1'; -- No need to keep the previous key
@@ -349,8 +347,6 @@ begin
                 end if;
                 
             when process_Npub =>
-                rdi_ready           <= '1';
-
                 if(rdi_valid = '1') then
                     X_in_mux_sel        <= '0';
                     if (ctr_time >= 4) then
@@ -427,8 +423,6 @@ begin
                 next_state          <= process_AD;
             
             when process_AD =>
-                rdi_ready           <= '1';  
-
                 if(rdi_valid = '1') then                            
                     if (ctr_time >= 4) then
                         ctr_time_rst <= '1';
@@ -495,8 +489,6 @@ begin
                 next_state          <= process_data;
             
             when process_data => 
-                rdi_ready           <= '1';
-                
                 if(rdi_valid = '1') then
                     if (ctr_time >= 4) then
                         ctr_time_rst <= '1';

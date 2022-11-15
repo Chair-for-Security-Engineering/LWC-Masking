@@ -1162,7 +1162,7 @@ BEGIN
 			IF (rst = '1') THEN
 				isap_encmac_s <= ISAP_ENC;
 			ELSE
-				rdi_ready <= '0';
+				rdi_ready <= '1';
 
 				CASE state_s IS
 					WHEN IDLE =>
@@ -1237,8 +1237,6 @@ BEGIN
 
 					WHEN ISAP_RK_INITIALIZE =>
 						-- Perform sK permutation rounds.
-						rdi_ready <= '1';
-						
 						IF (rdi_valid = '1') THEN
 						    IF (isap_cnt_s = X"01" and delay_cnt_s = B"01") THEN
 							    isap_cnt_s <= p_sB;
@@ -1258,8 +1256,6 @@ BEGIN
 
 					WHEN ISAP_RK_REKEYING =>
 						-- Absorb Y bit by bit. After absorption of 1 bit do sB permutation rounds.
-						rdi_ready <= '1';
-						
 						IF (rdi_valid = '1') THEN
 						    IF (delay_cnt_s = B"01") THEN
 						        IF (isap_cnt_y_s = 1 AND isap_cnt_s = X"01") THEN
@@ -1279,8 +1275,6 @@ BEGIN
 						END IF;
 					WHEN ISAP_RK_SQUEEZE =>
 						-- Perform sK permutation rounds.
-						rdi_ready <= '1';
-						
 						IF (rdi_valid = '1') THEN
 						    IF (delay_cnt_s = B"01") THEN
                                 delay_cnt_s <= LATENCY;
@@ -1298,8 +1292,6 @@ BEGIN
 
 					WHEN ISAP_ENC_PERMUTE_PE =>
 						-- Perform sE permutation rounds.
-						rdi_ready <= '1';
-						
 						IF (rdi_valid = '1') THEN
 						    IF (delay_cnt_s = B"01") THEN
                                 delay_cnt_s <= LATENCY;
@@ -1344,8 +1336,6 @@ BEGIN
 
 					WHEN ISAP_MAC_INITIALIZE =>
 						-- Perform sH permutation rounds.
-						rdi_ready <= '1';
-						
 						IF (rdi_valid = '1') THEN
 						    IF (delay_cnt_s = B"01") THEN
 						        isap_state_s <= perm_out_s;
@@ -1390,8 +1380,6 @@ BEGIN
 
 					WHEN ISAP_MAC_PROCESS_AD =>
 						-- Perform sH permutation rounds.
-						rdi_ready <= '1';
-						
 						IF (rdi_valid = '1') THEN
 						    IF (delay_cnt_s = B"01") THEN
 						        isap_cnt_s <= std_logic_vector(unsigned(isap_cnt_s) - 1);
@@ -1406,8 +1394,6 @@ BEGIN
 						END IF; 
 					WHEN ISAP_MAC_ABSORB_AD_PAD =>
 						-- Absorb block that only contains padding.
-						rdi_ready <= '1';
-						
 						IF (rdi_valid = '1') THEN
 						    IF (delay_cnt_s = B"01") THEN
 						        isap_cnt_s <= std_logic_vector(unsigned(isap_cnt_s) - 1);
@@ -1477,8 +1463,6 @@ BEGIN
 
 					WHEN ISAP_MAC_PROCESS_CT =>
 						-- Perform sH permutation rounds.
-						rdi_ready <= '1';
-						
 						IF (rdi_valid = '1') THEN
 						    IF (delay_cnt_s = B"01") THEN
 						        isap_cnt_s <= std_logic_vector(unsigned(isap_cnt_s) - 1);
@@ -1493,8 +1477,6 @@ BEGIN
 						END IF;  
 					WHEN ISAP_MAC_ABSORB_CT_PAD =>
 						-- Absorb block that only contains padding
-						rdi_ready <= '1';
-						
 						IF (rdi_valid = '1') THEN
 					        IF (delay_cnt_s = B"01") THEN
 						        isap_cnt_s <= std_logic_vector(unsigned(isap_cnt_s) - 1);
@@ -1515,8 +1497,6 @@ BEGIN
 
 					WHEN ISAP_MAC_FINALIZE_PERMUTE_PH =>
 						-- Perform sH permutation rounds.
-						rdi_ready <= '1';
-						
 						IF (rdi_valid = '1') THEN
 					        IF (delay_cnt_s = B"01") THEN
 						        isap_cnt_s <= std_logic_vector(unsigned(isap_cnt_s) - 1);

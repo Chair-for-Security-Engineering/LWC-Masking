@@ -161,7 +161,7 @@ begin
     
     key_ready <= '0';
     bdi_ready <= '0';
-    rdi_ready <= '0';
+    rdi_ready <= '1';
     bdi_size_intern <= bdi_size(1 downto 0);
     bdo <= bdo_s;
     data_type_sel <= '0';
@@ -203,8 +203,6 @@ begin
         n_ctl_s <= STORE_RND;
         
     when STORE_RND =>
-        rdi_ready <= '1';
-        
         if(rdi_valid = '1') then
             if bdi_valid = '1' or key_valid = '1' then
                 if key_update = '1' then
@@ -242,8 +240,6 @@ begin
             load_lfsr <= '1';
         end if;
     when PERM_KEY =>
-        rdi_ready <= '1';
-        
         if(rdi_valid = '1') then
             if (time_cnt_int >= LATENCY) then
                 n_time_cnt_int <= 0;
@@ -372,8 +368,6 @@ begin
         end if;
             
     when PERM =>
-        rdi_ready <= '1';
-        
         if(rdi_valid = '1') then
             if(time_cnt_int >= LATENCY) then
                 n_time_cnt_int <= 0;
