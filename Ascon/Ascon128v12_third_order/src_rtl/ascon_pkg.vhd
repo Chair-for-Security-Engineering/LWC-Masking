@@ -23,6 +23,10 @@ package ascon_pkg is
     constant UROL : INTEGER RANGE 0 TO 4 := 1; -- v1 or v2
     constant ZERRO : INTEGER RANGE 0 TO 4 := 0; -- v1 or v2
 
+    -- constant UROL : INTEGER RANGE 0 TO 4 := 2; -- v3 or v4
+    -- constant UROL : INTEGER RANGE 0 TO 4 := 3; -- v5
+    -- constant UROL : INTEGER RANGE 0 TO 4 := 4; -- v6
+
     ---------------------------------------------------------------------------
     --                              _ ____  ___  
     --   __ _ ___  ___ ___  _ __   / |___ \( _ ) 
@@ -105,11 +109,13 @@ package body ascon_pkg is
                     res(8*(i+1)-1+0*32 downto 8*i+0*32) := res(8*(i+1)-1+0*32 downto 8*i+0*32) XOR bdi(8*(i+1)-1+0*32 downto 8*i+0*32);
                     res(8*(i+1)-1+1*32 downto 8*i+1*32) := res(8*(i+1)-1+1*32 downto 8*i+1*32) XOR bdi(8*(i+1)-1+1*32 downto 8*i+1*32);
                     res(8*(i+1)-1+2*32 downto 8*i+2*32) := res(8*(i+1)-1+2*32 downto 8*i+2*32) XOR bdi(8*(i+1)-1+2*32 downto 8*i+2*32);                    
-                else
+                    res(8*(i+1)-1+3*32 downto 8*i+3*32) := res(8*(i+1)-1+3*32 downto 8*i+3*32) XOR bdi(8*(i+1)-1+3*32 downto 8*i+3*32);                    
+				else
                     res(8*(i+1)-1+0*32 downto 8*i+0*32) := bdi(8*(i+1)-1+0*32 downto 8*i+0*32);
                     res(8*(i+1)-1+1*32 downto 8*i+1*32) := bdi(8*(i+1)-1+1*32 downto 8*i+1*32);
                     res(8*(i+1)-1+2*32 downto 8*i+2*32) := bdi(8*(i+1)-1+2*32 downto 8*i+2*32);
-                end if;
+                    res(8*(i+1)-1+3*32 downto 8*i+3*32) := bdi(8*(i+1)-1+3*32 downto 8*i+3*32);
+				end if;
             elsif (bdi_pad_loc(i) = '1') then
                 res(8*(i+1) - 1 downto 8*i) := res(8*(i+1) - 1 downto 8*i) XOR x"80";
             end if;
@@ -125,6 +131,7 @@ package body ascon_pkg is
             res(word_idx_s*32+31+0*320 downto word_idx_s*32+0*320) := paddy(1*32-1 downto 0*32);
             res(word_idx_s*32+31+1*320 downto word_idx_s*32+1*320) := paddy(2*32-1 downto 1*32);
             res(word_idx_s*32+31+2*320 downto word_idx_s*32+2*320) := paddy(3*32-1 downto 2*32);
+            res(word_idx_s*32+31+3*320 downto word_idx_s*32+3*320) := paddy(4*32-1 downto 3*32);
 
             IF (word_idx_s = 0 and bdi_eot = '1' and bdi_partial_s = '0' ) THEN
                 res(word_idx_s*32+32+7 downto word_idx_s*32+32) := res(word_idx_s*32+32+7 downto word_idx_s*32+32) XOR X"80";
@@ -133,6 +140,7 @@ package body ascon_pkg is
             res(word_idx_s*32+31+0*320 downto word_idx_s*32+0*320) := paddy(1*32-1 downto 0*32);
             res(word_idx_s*32+31+1*320 downto word_idx_s*32+1*320) := paddy(2*32-1 downto 1*32);
             res(word_idx_s*32+31+2*320 downto word_idx_s*32+2*320) := paddy(3*32-1 downto 2*32);
+            res(word_idx_s*32+31+3*320 downto word_idx_s*32+3*320) := paddy(4*32-1 downto 3*32);
 
             IF (word_idx_s < 3 and bdi_eot = '1' and bdi_partial_s = '0' ) THEN
                 res(word_idx_s*32+32+7 downto word_idx_s*32+32) := res(word_idx_s*32+32+7 downto word_idx_s*32+32) XOR X"80";

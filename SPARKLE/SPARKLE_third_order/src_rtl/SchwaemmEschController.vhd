@@ -146,7 +146,6 @@ architecture behavioral of controller is
     signal num_steps : integer;
     signal state_sparkle_in, state_sparkle_out : std_logic_vector(PDI_SHARES * 384 - 1 downto 0);
     signal sparkle_in_sel : std_logic_vector(1 downto 0);
-    signal bdi_valid_bytes_delayed : std_logic_vector(3 downto 0);
        
     signal tag_reg, bdi_blk_reg : std_logic_vector(PDI_SHARES * 128 - 1 downto 0);
     signal tag_reg_unshared, bdi_blk_reg_unshared : std_logic_vector(127 downto 0);
@@ -160,16 +159,7 @@ begin
     key_s2 <= key(3*CCSW-1 downto 2*CCSW);
     key_s3 <= key(4*CCSW-1 downto 3*CCSW);
    
-    -- Registers:
-    bdi_valid_bytes_delay: entity work.regGen(behavioral)
-    generic map (width => 4)
-    port map(
-        d => bdi_valid_bytes,
-	    e => '1',
-	    clk => clk,
-	    q => bdi_valid_bytes_delayed
-    );
-                
+    -- Registers:     
     bdi_valid_reg_unit: entity work.regGen(behavioral)
     generic map (width => 4)
     port map(
@@ -831,7 +821,7 @@ begin
     end if;
 end process;
 
-fsm_process: process(ad_flag, current_state, key_update, key_valid, bdi_valid, bdi_type, bdi_size, bdi_valid_bytes, bdi_valid_bytes_delayed, bdi_pad_reg, lblk_reg, perm_complete, num_steps, word_counter, bdi_eot, hash_reg, eoi_reg, dec_reg, lword_index)
+fsm_process: process(ad_flag, current_state, key_update, key_valid, bdi_valid, bdi_type, bdi_size, bdi_pad_reg, lblk_reg, perm_complete, num_steps, word_counter, bdi_eot, hash_reg, eoi_reg, dec_reg, lword_index)
 begin
  
     -- DEFAULTS:
@@ -1106,7 +1096,7 @@ begin
             zero_fill <= '1';                           -- Enable zero fill for the rest of block
             
             -- Check previous word validity
-            if (bdi_valid_bytes_delayed = VALID_WORD) then
+            if (bdi_valid_bytes = VALID_WORD) then
                 bdi_pad_en <= '1';                      -- Enable padding of zero-filled word
                 store_pad_en <= '1';                    -- Store the padding flag
             end if;
